@@ -59,3 +59,18 @@ def review(predictions, expected, min_frames=1):
     return {**result, "segments": runs}
 
 
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", type=Path, help="PREGO JSON: video ID -> {pred: action IDs}")
+    parser.add_argument("--expected", required=True, help="Comma-separated action IDs")
+    parser.add_argument("--min-frames", type=int, default=1)
+    parser.add_argument("--output", required=True, type=Path)
+    args = parser.parse_args()
+    expected = [int(x) for x in args.expected.split(",")]
+    data = json.loads(args.input.read_text())
+    results = {video: review(row["pred"], expected, args.min_frames) for video, row in data.items()}
+    args.output.write_text(json.dumps(results, indent=2) + "\n")
+
+
+if __name__ == "__main__":
+    main()
