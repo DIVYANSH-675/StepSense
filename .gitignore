@@ -630,3 +630,8 @@ Epic-tent-O
 prova_da_cancellare
 results
 .vsocde
+# Generated extension outputs
+__pycache__/
+*.pyc
+report.json
+report.html
